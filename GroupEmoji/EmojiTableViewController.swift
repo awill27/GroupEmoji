@@ -135,6 +135,9 @@ class EmojiTableViewController: UITableViewController {
 
     }
     
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .none
+    }
 
     /*
     // Override to support conditional rearranging of the table view.
