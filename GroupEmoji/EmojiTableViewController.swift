@@ -11,8 +11,13 @@ class EmojiTableViewController: UITableViewController {
     
     
     var emojis: [Emoji] = [
-       Emoji(symbol: "😀", name: "Grinning Face",
-       description: "A typical smiley face.", usage: "happiness"),
+       Emoji(symbol: "😀", name: "Put On A Happy Face",
+       description: "A typical smiley face.", usage: "joy"),
+       Emoji(symbol: "🦄", name: "A Rare Gem", description: "A unicorn with purple hair and horn coming out of it's forehead.", usage: "You experienced something rare and unusual"),
+       Emoji(symbol: "🌭", name: "Tasty Dog", description: "A hot dog on a bun, with mustard on top", usage: "A meal suggestion"),
+       Emoji(symbol: "✌️", name: "The Signature V", description: "Hand gesture giving the peace sign", usage: "Hello, or Goodbye"),
+       Emoji(symbol: "🍩", name: "Go Nuts For Donuts", description: "A chocolate donut with sprinkles", usage: "A meal suggestion, a good pairing with coffee"),
+       Emoji(symbol: "👽", name: "", description: "A grey alien with black eyes ", usage: "Can be used as saying your out of this world; offensively, or as a compliment"),
        Emoji(symbol: "😕", name: "Confused Face",
        description: "A confused, puzzled face.",usage: "unsure what to think; displeasure"),
        Emoji(symbol: "😍", name: "Heart Eyes",
