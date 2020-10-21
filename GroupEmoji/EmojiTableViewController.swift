@@ -139,6 +139,10 @@ class EmojiTableViewController: UITableViewController {
         return .none
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
+
+    }
     /*
     // Override to support conditional rearranging of the table view.
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
