@@ -14,10 +14,11 @@ class EmojiTableViewController: UITableViewController {
        Emoji(symbol: "😀", name: "Put On A Happy Face",
        description: "A typical smiley face.", usage: "joy"),
        Emoji(symbol: "🦄", name: "A Rare Gem", description: "A unicorn with purple hair and horn coming out of it's forehead.", usage: "You experienced something rare and unusual"),
-       Emoji(symbol: "🌭", name: "Tasty Dog", description: "A hot dog on a bun, with mustard on top", usage: "A meal suggestion"),
-       Emoji(symbol: "✌️", name: "The Signature V", description: "Hand gesture giving the peace sign", usage: "Hello, or Goodbye"),
-       Emoji(symbol: "🍩", name: "Go Nuts For Donuts", description: "A chocolate donut with sprinkles", usage: "A meal suggestion, a good pairing with coffee"),
-       Emoji(symbol: "👽", name: "", description: "A grey alien with black eyes ", usage: "Can be used as saying your out of this world; offensively, or as a compliment"),
+       Emoji(symbol: "🌭", name: "Tasty Dog", description: "A hot dog on a bun, with mustard on top.", usage: "A meal suggestion"),
+       Emoji(symbol: "✌️", name: "The Signature V", description: "Hand gesture giving the peace sign.", usage: "Hello, or Goodbye"),
+       Emoji(symbol: "🍩", name: "Go Nuts For Donuts", description: "A chocolate donut with sprinkles on top .", usage: "A meal suggestion, a good pairing with coffee"),
+       Emoji(symbol: "👽", name: "Not Of Earth", description: "A grey alien with big black eyes. ", usage: "Can be used as saying your out of this world; offensively, or as a compliment"),
+       Emoji(symbol: "🍉", name: "Pink Melon", description: "A half of watermelon with pink flesh, and seeds.", usage: "A meal suggestion for a picnic, representing the summer time"),
        Emoji(symbol: "😕", name: "Confused Face",
        description: "A confused, puzzled face.",usage: "unsure what to think; displeasure"),
        Emoji(symbol: "😍", name: "Heart Eyes",
@@ -51,6 +52,9 @@ class EmojiTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.leftBarButtonItem = editButtonItem
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 44.0
+        
 
         
         
@@ -89,12 +93,12 @@ class EmojiTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "EmojiCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "EmojiCell", for: indexPath) as!EmojiTableViewCell
         
         let emoji = emojis[indexPath.row]
-        cell.textLabel?.text = "\(emoji.symbol) - \(emoji.name)"
-        cell.detailTextLabel?.text = emoji.description
-        
+//        cell.textLabel?.text = "\(emoji.symbol) - \(emoji.name)"
+//        cell.detailTextLabel?.text = emoji.description
+        cell.update(with: emoji)
         cell.showsReorderControl = true
 
         // Configure the cell...
@@ -102,12 +106,12 @@ class EmojiTableViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let emoji = emojis[indexPath.row]
-            print("\(emoji.symbol) \(indexPath)")
-
-        
-    }
+//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        let emoji = emojis[indexPath.row]
+//           print("\(emoji.symbol) \(indexPath)")
+//
+//        
+//    }
     
 
     /*
@@ -141,29 +145,58 @@ class EmojiTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        return .none
+        return .delete
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+                emojis.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: . automatic)
+            }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         tableView.reloadData()
 
     }
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+         if segue.identifier == "EditEmoji" {
+                let indexPath = tableView.indexPathForSelectedRow!
+                let emoji = emojis[indexPath.row]
+                let navController = segue.destination as!
+                   UINavigationController
+                let addEditEmojiTableViewController =
+                   navController.topViewController as!
+                   AddEditEmojiTableViewController
+        
+                addEditEmojiTableViewController.emoji = emoji
+        
     }
-    */
+        
 
+            
+        
+    }
+    
+@IBAction func unwindToEmojiTableView(unwindsegue: UIStoryboardSegue) {
+    guard unwindsegue.identifier == "saveUnwind",
+            let sourceViewController = unwindsegue.source as?
+            AddEditEmojiTableViewController,
+            let emoji = sourceViewController.emoji else { return }
+   
+        if let selectedIndexPath = tableView.indexPathForSelectedRow
+        {
+            emojis[selectedIndexPath.row] = emoji
+            tableView.reloadRows(at: [selectedIndexPath],
+            with: .none)
+        } else {
+            let newIndexPath = IndexPath(row: emojis.count,
+            section: 0)
+            emojis.append(emoji)
+            tableView.insertRows(at: [newIndexPath],
+            with: .automatic)
+   
+}
+}
 }
